@@ -25,12 +25,6 @@ class UserServiceIntegrationTest @Autowired constructor(
     private val userRepository: UserRepository,
     private val databaseCleanUp: DatabaseCleanUp,
 ) {
-    /**
-     * **통합 테스트**
-    - [ ]  회원 가입시 User 저장이 수행된다. ( spy 검증 )
-    - [ ]  이미 가입된 ID 로 회원가입 시도 시, 실패한다.
-     */
-
     @AfterEach
     fun tearDown() {
         databaseCleanUp.truncateAllTables()
@@ -85,13 +79,6 @@ class UserServiceIntegrationTest @Autowired constructor(
             )
         }
     }
-
-    /**
-     * **통합 테스트**
-     *
-     * - [ ]  해당 ID 의 회원이 존재할 경우, 회원 정보가 반환된다.
-     * - [ ]  해당 ID 의 회원이 존재하지 않을 경우, null 이 반환된다.
-     */
 
     @DisplayName("내 정보 조회")
     @Nested

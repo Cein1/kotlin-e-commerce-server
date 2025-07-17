@@ -23,12 +23,6 @@ class PointServiceIntegrationTest @Autowired constructor(
     private val pointService: PointService,
     private val databaseCleanUp: DatabaseCleanUp,
 ) {
-    /**
-     * **통합 테스트**
-     *
-     * - [ ]  해당 ID 의 회원이 존재할 경우, 보유 포인트가 반환된다.
-     * - [ ]  해당 ID 의 회원이 존재하지 않을 경우, null 이 반환된다.
-     */
     @AfterTest
     fun tearDown() {
         databaseCleanUp.truncateAllTables()
@@ -69,10 +63,6 @@ class PointServiceIntegrationTest @Autowired constructor(
         }
     }
 
-    /**
-     * **통합 테스트**
-     * - [ ]  존재하지 않는 유저 ID 로 충전을 시도한 경우, 실패한다.
-     */
     @DisplayName("포인트 충전")
     @Nested
     inner class Charge {

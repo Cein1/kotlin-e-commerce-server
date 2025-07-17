@@ -14,12 +14,6 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class UserModelTest {
-    /**
-     * **단위 테스트**
-     * - [ ]  ID 가 `영문 및 숫자 10자 이내` 형식에 맞지 않으면, User 객체 생성에 실패한다.
-     * - [ ]  이메일이 `xx@yy.zz` 형식에 맞지 않으면, User 객체 생성에 실패한다.
-     * - [ ]  생년월일이 `yyyy-MM-dd` 형식에 맞지 않으면, User 객체 생성에 실패한다.
-     */
     @DisplayName("회원가입")
     @Nested
     inner class Create {
@@ -35,18 +29,12 @@ class UserModelTest {
             ],
         )
         fun failToCreateUserModel_whenUserIdIsInvalid(userId: String) {
-            // arrange: 테스트에 필요한 데이터, 객체, 환경 등
-            // 조건에 맞지 않는 ID 형식을 준비해
             val email = "userA@example.com"
             val gender = UserModel.GenderResponse.M
             val birthDate = LocalDate.parse("2020-01-01", DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
-            // act: 테스트 대상이 되는 기능/메서드/행동 실제로 실행
-            // 1. 조건 검사를 시행해
-            // 2. 예외를 터지게 해: User 객체가 생성될 때 예외가 터진다.
             val exception = assertThrows<CoreException> { UserModel(userId = userId, email = email, gender = gender, birthDate = birthDate) }
 
-            // assert: 실행 결과가 기대한 대로 나왔는지
             assertAll(
                 { assertThat(exception.errorType).isEqualTo(ErrorType.BAD_REQUEST) },
             )

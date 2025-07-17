@@ -23,13 +23,6 @@ class PointV1ApiE2ETest @Autowired constructor(
     private val testRestTemplate: TestRestTemplate,
     private val databaseCleanUp: DatabaseCleanUp,
 ) {
-    /**
-     * **E2E 테스트**
-     *
-     * - [ ]  포인트 조회에 성공할 경우, 보유 포인트를 응답으로 반환한다.
-     * - [ ]  `X-USER-ID` 헤더가 없을 경우, `400 Bad Request` 응답을 반환한다.
-     */
-
     companion object {
         private const val ENDPOINT_POINT_GET = "/api/v1/points"
         private const val ENDPOINT_POINT_CHARGE = "/api/v1/points/charge"
@@ -73,12 +66,6 @@ class PointV1ApiE2ETest @Autowired constructor(
         }
     }
 
-    /**
-     * **E2E 테스트**
-     *
-     * - [ ]  존재하는 유저가 1000원을 충전할 경우, 충전된 보유 총량을 응답으로 반환한다.
-     * - [ ]  존재하지 않는 유저로 요청할 경우, `404 Not Found` 응답을 반환한다.
-     */
     @DisplayName("POST /api/v1/points/charge")
     @Nested
     inner class Charge {
