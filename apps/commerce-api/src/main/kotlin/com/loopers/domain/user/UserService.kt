@@ -15,4 +15,6 @@ class UserService(private val userRepository: UserRepository) {
 
         return userRepository.save(user)
     }
+
+    fun getUserInfo(userId: String): UserModel? = userRepository.findByUserId(userId)
 }
