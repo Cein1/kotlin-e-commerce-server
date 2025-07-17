@@ -2,12 +2,15 @@ package com.loopers.domain.point
 
 import com.loopers.domain.user.UserModel
 import com.loopers.domain.user.UserService
+import com.loopers.support.error.CoreException
+import com.loopers.support.error.ErrorType
 import com.loopers.utils.DatabaseCleanUp
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import java.time.LocalDate
@@ -62,6 +65,25 @@ class PointServiceIntegrationTest @Autowired constructor(
 
             assertAll(
                 { assertThat(balance).isNull() },
+            )
+        }
+    }
+
+    /**
+     * **통합 테스트**
+     * - [ ]  존재하지 않는 유저 ID 로 충전을 시도한 경우, 실패한다.
+     */
+    @DisplayName("포인트 충전")
+    @Nested
+    inner class Charge {
+        @DisplayName("존재하지 않는 유저 ID 로 충전을 시도한 경우, 실패한다.")
+        @Test
+        fun failToCharge_whenUserIdNotExist() {
+            val userId = "userB"
+            val exception = assertThrows<CoreException> { pointService.chargeAmount(userId, 1000.toULong()) }
+
+            assertAll(
+                { assertThat(exception.errorType).isEqualTo(ErrorType.BAD_REQUEST) },
             )
         }
     }
