@@ -9,4 +9,8 @@ import io.swagger.v3.oas.annotations.tags.Tag
 interface PointV1ApiSpec {
     @Operation(summary = "포인트 조회")
     fun getStatus(@Parameter(name = "X-USER-ID", required = true)userId: String): ApiResponse<PointV1Dto.PointStatusResponse>
+    fun charge(
+        @Parameter(name = "X-USER-ID", required = true)userId: String,
+        request: PointV1Dto.PointChargeRequest,
+    ): ApiResponse<PointV1Dto.PointStatusResponse>
 }

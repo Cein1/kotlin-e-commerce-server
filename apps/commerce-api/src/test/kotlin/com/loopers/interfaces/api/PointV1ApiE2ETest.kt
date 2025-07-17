@@ -16,6 +16,7 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class PointV1ApiE2ETest @Autowired constructor(
@@ -41,7 +42,7 @@ class PointV1ApiE2ETest @Autowired constructor(
 
     @DisplayName("GET /api/v1/points")
     @Nested
-    inner class GetPointStatus {
+    inner class GetBalance {
         @DisplayName("포인트 조회에 성공할 경우, 보유 포인트를 응답으로 반환한다.")
         @Test
         fun returnPointStatus_whenRetrievePointSuccess() {
@@ -72,11 +73,51 @@ class PointV1ApiE2ETest @Autowired constructor(
         }
     }
 
-//    @DisplayName("POST /api/v1/points/charge")
-//    @Nested
-//    inner class GetPointStatus {
-//        @DisplayName("포인트 조회에 성공할 경우, 보유 포인트를 응답으로 반환한다.")
-//        @Test
-//
-//    }
+    /**
+     * **E2E 테스트**
+     *
+     * - [ ]  존재하는 유저가 1000원을 충전할 경우, 충전된 보유 총량을 응답으로 반환한다.
+     * - [ ]  존재하지 않는 유저로 요청할 경우, `404 Not Found` 응답을 반환한다.
+     */
+    @DisplayName("POST /api/v1/points/charge")
+    @Nested
+    inner class Charge {
+        @DisplayName("존재하는 유저가 1000원을 충전할 경우, 충전된 보유 총량을 응답으로 반환한다.")
+        @Test
+        fun returnBalance_whenCharge1000() {
+            val userId = "userA"
+            val headers = HttpHeaders().apply {
+                contentType = MediaType.APPLICATION_JSON
+                set("X-USER-ID", userId)
+            }
+
+            val requestDto = PointV1Dto.PointChargeRequest(amount = 1000)
+            val responseType = object : ParameterizedTypeReference<ApiResponse<PointV1Dto.PointStatusResponse>>() {}
+            val pointStatusResponse = testRestTemplate.exchange(ENDPOINT_POINT_CHARGE, HttpMethod.POST, HttpEntity<PointV1Dto.PointChargeRequest>(requestDto, headers), responseType)
+
+            assertAll(
+                { assertThat(pointStatusResponse.statusCode).isEqualTo(HttpStatus.OK) },
+                { assertThat(pointStatusResponse.body?.data?.userId).isEqualTo(userId) },
+                { assertThat(pointStatusResponse.body?.data?.balance).isEqualTo(1000.toULong()) },
+            )
+        }
+
+        @DisplayName("존재하지 않는 유저로 요청할 경우, `404 Not Found` 응답을 반환한다.")
+        @Test
+        fun returnNotFound_whenUserNotExist() {
+            val userId = "userB"
+            val headers = HttpHeaders().apply {
+                contentType = MediaType.APPLICATION_JSON
+                set("X-USER-ID", userId)
+            }
+
+            val requestDto = PointV1Dto.PointChargeRequest(amount = 1000)
+            val responseType = object : ParameterizedTypeReference<ApiResponse<PointV1Dto.PointStatusResponse>>() {}
+            val pointStatusResponse = testRestTemplate.exchange(ENDPOINT_POINT_CHARGE, HttpMethod.POST, HttpEntity<PointV1Dto.PointChargeRequest>(requestDto, headers), responseType)
+
+            assertAll(
+                { assertThat(pointStatusResponse.statusCode).isEqualTo(HttpStatus.NOT_FOUND) },
+            )
+        }
+    }
 }
