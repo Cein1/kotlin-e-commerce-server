@@ -64,6 +64,7 @@ classDiagram
 	class OrderItem {
 		Long id
 		Order order
+        String name
         String thumbnail
         BigDecimal price
 		Int quantity
