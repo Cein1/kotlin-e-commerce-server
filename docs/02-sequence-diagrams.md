@@ -181,3 +181,65 @@ sequenceDiagram
 		end
 	end
 end
+
+# 유저의 주문 목록 조회 GET /api/v1/orders
+sequenceDiagram
+    participant User
+    participant OrderController
+    participant OrderFacade
+    participant OrderService
+    participant OrderItemService
+    participant UserService
+    participant OrderRepository
+    participant PaymentRepository
+
+	User->>OrderController: GET /api/v1/orders
+	OrderController->>OrderFacade: 주문 목록 조회 (userId, productId, quantity)
+	OrderFacade->>UserService: 사용자 정보 조회 (userId)
+	UserService->>OrderFacade: 사용자 정보 반환
+	alt 사용자 존재X
+		OrderFacade->>OrderController: 401 Unauthorized
+	else 사용자 존재
+		OrderFacade->>OrderService: 주문 목록 조회(userId)
+		OrderService->>OrderRepository: [주문번호, 주문일시] 목록 조회(userId)
+		OrderRepository->>OrderService: 주문 목록 반환
+		OrderService->>OrderFacade: 주문번호 목록 반환
+		OrderFacade->>OrderItemService: 주문번호별 상품정보[썸네일, 상품명, 수량] 조회(orderId)
+		OrderItemService->>OrderFacade: 주문번호별 상품정보 반환
+		OrderFacade->>PaymentService: 주문번호별 총 결제금액 조회(orderId)
+		PaymentService->>OrderFacade: 주문번호별 총 결제금액 반환
+		OrderFacade->>OrderController: 주문 목록[주문일, 상품정보, 총 결제금액] 반환
+    end
+
+## 단일 주문 상세 조회 GET /api/v1/orders/{orderId}
+sequenceDiagram
+    participant User
+    participant OrderController
+    participant OrderFacade
+    participant OrderService
+    participant OrderItemService
+    participant UserService
+    participant OrderRepository
+    participant PaymentRepository
+
+	User->>OrderController: GET /api/v1/orders
+	OrderController->>OrderFacade: 주문 목록 조회 (userId, productId, quantity)
+	OrderFacade->>UserService: 사용자 정보 조회 (userId)
+	UserService->>OrderFacade: 사용자 정보 반환
+	alt 사용자 존재X
+		OrderFacade->>OrderController: 401 Unauthorized
+	else 사용자 존재
+		OrderFacade->>OrderService: 주문 조회(orderId)
+		OrderService->>OrderRepository: [주문일시, 주문상태] 조회(orderId)
+		alt 주문은 존재하지만 사용자 정보가 일치하지 않음
+			OrderFacade->>OrderController: 403 Forbidden
+		else 주문과 사용자 정보가 일치함
+			OrderRepository->>OrderService: 주문정보[주문일시, 주문상태] 반환
+			OrderService->>OrderFacade: 주문번호 목록 반환
+			OrderFacade->>OrderItemService: 주문번호에 속한 상품별 정보[썸네일, 상품명, 수량, 가격, 총 금액] 조회(orderId)
+			OrderItemService->>OrderFacade: 주문에 대한 상품정보 반환
+			OrderFacade->>PaymentService: 주문에 대한 결제정보[총 결제금액, 결제상태] 조회(orderId)
+			PaymentService->>OrderFacade: 주문에 대한 결제정보 반환
+			OrderFacade->>OrderController: 주문 목록[주문정보(일시, 상태), 상품정보, 결제정보(총 금액, 상태)] 반환
+        end
+    end
