@@ -28,4 +28,8 @@ class LikeService(private val likeRepository: LikeRepository) {
     fun getLikesCountForProducts(productIds: List<Long>): Map<Long, Long> {
         return likeRepository.countByProductIds(productIds)
     }
+
+    fun getMyLikedProductIds(userId: Long): List<Long> {
+        return likeRepository.getMyLikedProductIds(userId)
+    }
 }

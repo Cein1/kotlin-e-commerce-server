@@ -6,4 +6,5 @@ interface LikeRepository {
     fun delete(like: LikeModel)
     fun countByProductId(productId: Long): Long
     fun countByProductIds(productIds: List<Long>): Map<Long, Long>
+    fun getMyLikedProductIds(userId: Long): List<Long>
 }

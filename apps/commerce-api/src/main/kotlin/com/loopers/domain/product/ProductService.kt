@@ -43,7 +43,7 @@ class ProductService(private val productRepository: ProductRepository) {
     fun getProducts(
         page: Int,
         size: Int,
-        sortType: String,
+        sortType: String?,
     ): List<ProductModel> {
         val productSortType = ProductSortType.fromString(sortType)
         val pageable = PageRequest.of(
