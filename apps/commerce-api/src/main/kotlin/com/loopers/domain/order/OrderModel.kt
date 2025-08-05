@@ -1,19 +1,15 @@
-package com.loopers.domain.point
+package com.loopers.domain.order
 
 import com.loopers.domain.BaseEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Table
-import java.math.BigDecimal
 
 @Entity
-@Table(name = "points")
-class PointModel(
+@Table(name = "products")
+class OrderModel(
     @Column(name = "ref_user_id", nullable = false)
     val refUserId: Long,
-    val inbound: BigDecimal,
-    val outbound: BigDecimal,
-    val balance: BigDecimal,
 ) : BaseEntity() {
     init {
     }

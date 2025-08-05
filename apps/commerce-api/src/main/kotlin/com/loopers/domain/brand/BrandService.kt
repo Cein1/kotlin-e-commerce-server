@@ -7,7 +7,7 @@ class BrandService(
         return brandRepository.findByIds(brandIds)
     }
 
-    fun getBrandsById(brandId: Long): BrandModel? {
-        return brandRepository.findById(brandId)
+    fun getBrandById(brandId: Long): BrandModel? {
+        return brandRepository.findById(brandId).orElse(null)
     }
 }

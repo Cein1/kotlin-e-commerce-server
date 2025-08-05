@@ -4,13 +4,14 @@ import com.loopers.application.point.PointInfo
 import com.loopers.support.error.CoreException
 import com.loopers.support.error.ErrorType
 import jakarta.validation.constraints.NotNull
+import java.math.BigDecimal
 
 class PointV1Dto {
     data class PointStatusResponse(
         @NotNull
         val userId: String,
         @NotNull
-        val balance: ULong,
+        val balance: BigDecimal,
     ) {
         companion object {
             fun from(
@@ -19,12 +20,12 @@ class PointV1Dto {
         }
     }
 
-    data class PointChargeRequest(val amount: Long) {
-        fun toPointInfo(userId: String, balance: ULong): PointInfo {
-            if (amount <= 0) {
+    data class PointChargeRequest(val amount: BigDecimal) {
+        fun toPointInfo(userId: String, balance: BigDecimal): PointInfo {
+            if (amount <= BigDecimal.ZERO) {
                 throw CoreException(ErrorType.BAD_REQUEST, "포인트 충전은 양수만 가능합니다")
             } else {
-                return PointInfo(userId = userId, amount = amount, balance = balance + amount.toULong())
+                return PointInfo(userId = userId, amount = amount, balance = balance + amount)
             }
         }
     }

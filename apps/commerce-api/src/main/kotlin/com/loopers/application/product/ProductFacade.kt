@@ -3,6 +3,8 @@ package com.loopers.application.product
 import com.loopers.domain.brand.BrandService
 import com.loopers.domain.like.LikeService
 import com.loopers.domain.product.ProductService
+import com.loopers.support.error.CoreException
+import com.loopers.support.error.ErrorType
 
 class ProductFacade(
     private val productService: ProductService,
@@ -41,9 +43,9 @@ class ProductFacade(
     fun getProduct(
         productId: Long,
     ): ProductInfo.ProductDetail {
-        val product = productService.getProductDetail(productId)
+        val product = productService.getProductDetail(productId) ?: throw CoreException(ErrorType.NOT_FOUND, "존재하지 않는 상품입니다")
         val likesCount = likesService.getLikesCount(productId)
-        val brand = brandService.getBrandsById(product.refBrandId)
+        val brand = brandService.getBrandById(product.refBrandId)
         return ProductInfo.ProductDetail(
             id = product.id,
             refBrandId = product.refBrandId,

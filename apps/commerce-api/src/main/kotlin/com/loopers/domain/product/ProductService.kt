@@ -1,10 +1,9 @@
 package com.loopers.domain.product
 
-import com.loopers.support.error.CoreException
-import com.loopers.support.error.ErrorType
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
+import java.math.BigDecimal
 
 enum class ProductSortType(val sort: Sort) {
     LATEST(
@@ -54,14 +53,19 @@ class ProductService(private val productRepository: ProductRepository) {
         return productRepository.findAll(pageable)
     }
 
-    fun getProductDetail(productId: Long): ProductModel {
-        return productRepository.findById(productId) ?: throw CoreException(
-            ErrorType.NOT_FOUND,
-            "상품을 찾을 수 없습니다.",
-        )
+    fun getProductDetail(productId: Long): ProductModel? {
+        return productRepository.findById(productId).orElse(null)
     }
 
     fun getProductsByBrand(brandId: Long): List<ProductModel> {
-        return productRepository.findAllByBrandId(brandId)
+        return productRepository.findAllByRefBrandId(brandId)
+    }
+
+    fun getProductPrice(productId: Long): BigDecimal {
+        return productRepository.getProductPrice(productId).orElse(BigDecimal.ZERO)
+    }
+
+    fun getProductDetails(productIds: List<Long>): Map<Long, ProductModel> {
+        return productRepository.findAllByIdIn(productIds).associateBy { it.id }
     }
 }

@@ -6,6 +6,7 @@ import com.loopers.domain.brand.BrandRepository
 import com.loopers.domain.brand.QBrandModel.brandModel
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Component
+import java.util.Optional
 
 @Component
 class BrandRepositoryImpl(
@@ -19,15 +20,15 @@ class BrandRepositoryImpl(
             .associateBy { it.id }
     }
 
-    override fun findById(id: Long): BrandModel? {
-        return brandJpaRepository.findById(id).orElse(null)
+    override fun findById(id: Long): Optional<BrandModel> {
+        return brandJpaRepository.findById(id)
     }
 
     override fun existsById(id: Long): Boolean {
-        TODO("Not yet implemented")
+        return brandJpaRepository.existsById(id)
     }
 
     override fun save(brand: BrandModel): BrandModel {
-        TODO("Not yet implemented")
+        return brandJpaRepository.save(brand)
     }
 }

@@ -1,6 +1,8 @@
 package com.loopers.domain.product
 
+import java.util.Optional
+
 interface StockRepository {
     fun save(stock: StockModel): StockModel
-    fun findLatestByProductId(productId: Long): StockModel?
+    fun findLatestByRefProductId(productId: Long): Optional<StockModel>
 }

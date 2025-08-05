@@ -22,6 +22,10 @@ spring:
       - jpa.yml
       - logging.yml
       - monitoring.yml
+  datasource:
+    url: jdbc:mysql://mysql:3306/loopers
+    username: application
+    password: application
 
 springdoc:
   use-fqn: true

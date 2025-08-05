@@ -17,7 +17,7 @@ class StockModel(
     val refProductId: Long,
     val inbound: Long?,
     val outbound: Long?,
-    val available: Long,
+    var available: Long,
 ) : BaseEntity() {
     init {
         if (inbound != null && inbound <= 0) {
