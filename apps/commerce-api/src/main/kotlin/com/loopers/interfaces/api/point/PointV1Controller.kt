@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.math.BigDecimal
 
 @RestController
 @RequestMapping("api/v1/points")
@@ -22,7 +23,7 @@ class PointV1Controller : PointV1ApiSpec {
         @RequestHeader("X-USER-ID")
         userId: String,
     ): ApiResponse<PointV1Dto.PointStatusResponse> = ApiResponse.success(
-        PointV1Dto.PointStatusResponse(userId = userId, balance = 10000u),
+        PointV1Dto.PointStatusResponse(userId = userId, balance = BigDecimal(10000)),
     )
 
     @ExceptionHandler(MissingRequestHeaderException::class)
@@ -41,8 +42,8 @@ class PointV1Controller : PointV1ApiSpec {
         @RequestBody
         request: PointV1Dto.PointChargeRequest,
     ): ApiResponse<PointV1Dto.PointStatusResponse> {
-        val oldBalance: ULong = 0u
-        val newBalance: ULong = oldBalance + request.amount.toULong()
+        val oldBalance: BigDecimal = BigDecimal.ZERO
+        val newBalance: BigDecimal = oldBalance + request.amount
 
         if (userId == "userA") {
             return ApiResponse.success(

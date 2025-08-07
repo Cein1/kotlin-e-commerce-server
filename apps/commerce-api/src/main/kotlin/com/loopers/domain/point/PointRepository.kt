@@ -1,5 +1,8 @@
 package com.loopers.domain.point
 
+import java.util.Optional
+
 interface PointRepository {
-    fun findByUserId(userId: String): PointModel?
+    fun findByRefUserId(refUserId: Long): Optional<PointModel>
+    fun getPointLog(refUserId: Long): PointModel?
 }

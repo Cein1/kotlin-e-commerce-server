@@ -162,8 +162,8 @@
             OrderFacade->>OrderFacade: 상품코드별 주문수량(quantity)과 재고(stock)를 비교한다.
             alt (주문수량 > 재고)
                 OrderFacade->>OrderFacade:결제 예정 품목에서 해당 상품을 제외한다.
-                OrderFacade->>OrderFacade:총 결제금액 = 총 결제금액 + (price)*(quantity)
             else (재고 >= 주문수량)
+                OrderFacade->>OrderFacade:총 결제금액 = 총 결제금액 + (price)*(quantity)
                 OrderFacade->>OrderFacade:결제 예정 품목에 포함한다.
             OrderFacade->>OrderFacade : 결제 가능한 상품 종류 갯수(n) 확인
             alt n = 0

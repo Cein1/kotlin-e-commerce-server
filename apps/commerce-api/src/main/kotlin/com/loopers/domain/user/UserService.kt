@@ -16,5 +16,10 @@ class UserService(private val userRepository: UserRepository) {
         return userRepository.save(user)
     }
 
-    fun getUserInfo(userId: String): UserModel? = userRepository.findByUserId(userId)
+    fun getUserInfo(userId: String): UserModel? {
+        if (userRepository.findByUserId(userId) == null) {
+            throw CoreException(errorType = ErrorType.NOT_FOUND, customMessage = "존재하지 않는 사용자입니다.")
+        }
+        return userRepository.findByUserId(userId)
+    }
 }
