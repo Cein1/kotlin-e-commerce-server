@@ -36,6 +36,7 @@ class StockService(
         stockRepository.save(newOutboundStock)
     }
 
+    /**
     fun writeInboundStock(
         productId: Long,
         quantity: Long,
@@ -51,4 +52,5 @@ class StockService(
 
         stockRepository.save(newInboundStock)
     }
+    */
 }
